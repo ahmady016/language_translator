@@ -10,12 +10,34 @@ export default function Translator() {
     deps: []
   });
 
-  const [base, setBase] = React.useState('USD');
-  const [target, setTarget] = React.useState('EGP');
+  const [text, setText] = React.useState('');
+  const [translation, setTranslation] = React.useState('');
+  const [base, setBase] = React.useState('en');
+  const [target, setTarget] = React.useState('ar');
+
+  const { data } = useFetch({
+    key: encodeURI(text.trim()),
+    req: ['get', `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190222T204521Z.55a390e0140bcbfe.09d6b0890e590eb79a0feb92abdd5f6695940df5&lang=${base}-${target}&text=${text}`],
+    deps: [text]
+  });
+
+  React.useEffect(
+    () => void setTranslation( (data.text)? data.text : '' ),
+    [data]
+  );
+
+  const swapLangs = () => {
+    setBase(target);
+    setTarget(base);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
 
   let renderOptions = null
   if(langs)
-    renderOptions = Object.keys(langs).map(key => (<option key={key} value={key}>{`${key} - ${langs[key]}`}</option>) );
+    renderOptions = Object.keys(langs).map(key => (<option key={key} value={key}>{langs[key]} ({key})</option>) );
 
   if(loading)
     return <Loading />
@@ -36,8 +58,8 @@ export default function Translator() {
               </select>
             </div>
             <div className="mx-2 my-2">
-              <button className="btn btn-success">
-                <i class="fas fa-exchange-alt"></i>
+              <button className="btn btn-success" onClick={swapLangs}>
+                <i className="fas fa-exchange-alt"></i>
               </button>
             </div>
             <div className="mx-2 my-2">
@@ -52,13 +74,19 @@ export default function Translator() {
           </div>
         </div>
         <div className="card-body">
-          <div className="flex-between">
+          <form className="flex-between" onSubmit={handleSubmit}>
             <label className="mr-sm-2 sr-only" htmlFor="text">Text</label>
-            <textarea id="text" className="form-control" placeholder="Enter Text ..." />
+            <textarea id="text" className="form-control"
+              placeholder="Enter Text ..."
+              value={text}
+              onChange={ e => setText(e.target.value) } />
             <div className="mx-2"></div>
             <label className="mr-sm-2 sr-only" htmlFor="translation">Translation</label>
-            <textarea id="translation" className="form-control" placeholder="Translation ..." />
-          </div>
+            <textarea id="translation" className="form-control"
+              placeholder="Translation ..."
+              value={translation}
+              readOnly={true} />
+          </form>
         </div>
         <div className="card-footer text-center text-light bg-secondary">
           Powered by Yandex Translation API
