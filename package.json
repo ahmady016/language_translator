@@ -6,7 +6,8 @@
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-scripts": "2.1.5",
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "rxjs": "^6.4.0"
   },
   "scripts": {
     "start": "set PORT=3400 && react-scripts start",
