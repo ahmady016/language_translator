@@ -102,3 +102,7 @@
   width: 2rem;
   margin-right: 0.7rem;
 }
+textarea.form-control {
+  min-height: 12rem;
+  font-size: 1.5rem;
+}

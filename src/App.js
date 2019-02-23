@@ -1,4 +1,5 @@
 import React from 'react';
+import Translator from './Translator';
 import './app.css';
 
 export default function App() {
@@ -13,7 +14,7 @@ export default function App() {
         </nav>
       </header>
       <div className="container">
-
+        <Translator />
       </div>
     </>
   );

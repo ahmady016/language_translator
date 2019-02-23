@@ -2,17 +2,6 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import LS from './localStorage'
 
-// timestamp units by milliseconds
-export const timestamp = {
-  year: 31536000000,  // 365 days
-  month: 2592000000,  // 30 days
-  week: 604800000,    // 7 days
-  day: 86400000,
-  hour: 3600000,
-  minute: 60000,
-  second: 1000
-};
-
 async function request(req) {
   const [ method, url, body = null ] = req;
   try {
@@ -27,7 +16,7 @@ async function request(req) {
   }
 }
 
-async function getData(req, key, timeout = timestamp.month, setState) {
+async function getData(req, key, timeout, setState) {
   setState({
     loading: true,
     error: '',
@@ -63,7 +52,18 @@ async function getData(req, key, timeout = timestamp.month, setState) {
   }
 }
 
-export function useFetch({ key, req, timeout, deps = [] }) {
+// timestamp units by milliseconds
+export const timestamp = {
+  year: 31536000000,  // 365 days
+  month: 2592000000,  // 30 days
+  week: 604800000,    // 7 days
+  day: 86400000,
+  hour: 3600000,
+  minute: 60000,
+  second: 1000
+};
+
+export function useFetch({ key, req, timeout = timestamp.month, deps = [] }) {
   const [state, setState] = useState({
     loading: true,
     error: '',
